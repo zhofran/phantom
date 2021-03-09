@@ -1,0 +1,40 @@
+<%= render 'layouts/navbar' %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
+			<% if user_signed_in? %>
+				<%= link_to "Create new Thread", new_forum_thread_path, class: 'btn btn-success', style: 'margin-bottom: 10px' %>
+			<% end %>
+
+			<% @threads.each do |t| %>
+				<div class="thread">
+					<h4>
+						<%= link_to t.title.titleize, forum_thread_path(t) %> 
+						<% if t.sticky? %>
+							<%= octicon "pin", :height => 24, style: 'transform: rotate(90deg)' %>
+						<% end %>
+					</h4>
+
+					<div class="meta">
+						<%= t.created_at.strftime(" %d %B %Y ") %> oleh <%= t.user.name %>
+					</div>
+					
+					<div class="content">
+						<%= truncate t.content, length: 30 %>
+					</div>
+
+					<div class="action">
+						<%= link_to 'Pin It', pinit_forum_thread_path(t), class: 'btn btn-primary', method: :put %>
+					</div>
+
+					<div class="count">
+						<%= t.forum_posts.count %> obrolan
+					</div>
+					<div style="clear: both"></div>
+				</div>
+			<% end %>
+
+			<%= will_paginate @threads, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+		</div>
+	</div>
+</div>

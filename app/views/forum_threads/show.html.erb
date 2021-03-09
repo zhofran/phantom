@@ -1,0 +1,49 @@
+<%= render 'layouts/navbar' %>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-3">
+			<div class="thread">
+				<h4><%= @threads.title.titleize %></h4>
+
+				<div class="meta">
+					<%= @threads.created_at.strftime(' %d %B %Y') %> oleh <%= @threads.user.name %>
+				</div>
+				
+				<div class="content">
+					<%= @threads.content %>
+				</div>
+
+				<% if policy(@threads).edit? %>
+					<div class="action-edit">
+						<%= link_to 'Edit', edit_forum_thread_path(@threads), class: 'btn btn-primary' %>
+						<% if policy(@threads).destroy? %>
+							<%= link_to 'Delete', forum_thread_path(@threads), method: :delete, data: {confirm: 'Do you want to delete this Thread ?'}, class: 'btn btn-danger', style: 'margin-left: 2%' %>
+						<% end %>
+					</div>
+				<% end %>
+			</div>
+
+			<% if @threads.forum_posts.any? %>
+				<% @posts.each do |p| %>
+					<div class="thread">
+						<div class="meta">
+							<%= p.created_at.strftime(' %d %B %Y') %> oleh <%= p.user.name %>
+						</div>
+						
+						<div class="content">
+							<%= p.content %>
+						</div>
+					</div>
+				<% end %>
+
+				<%= will_paginate @threads, renderer: WillPaginate::ActionView::BootstrapLinkRenderer %>
+			<% else %>
+				<div>
+					Be the first person to comment.
+				</div>
+			<% end %>
+
+			<%= render 'comment' %>
+		</div>
+	</div>
+</div>

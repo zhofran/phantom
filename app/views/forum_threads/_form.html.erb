@@ -1,0 +1,32 @@
+<% if @threads.errors.any? %>
+	<% @threads.errors.full_messages.each do |e| %>
+		<div class="alert alert-danger alert-dismissible">
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<%= e %></br>
+		</div>
+	<% end %>
+<% end %>
+<%= form_for @threads do |c| %>
+	<div class="form-group">
+		<%= c.label :title %>
+		<%= c.text_field :title, class: 'form-control' %>
+	</div>
+
+	<div class="form-group">
+		<%= c.label :content %>
+		<%= c.text_area :content, rows: 10, class: 'form-control' %>
+	</div>
+
+	<div class="form-group">
+		<% if @threads.id %>
+			<%= link_to "Cancel", forum_thread_path(), class: 'btn btn-danger', style: 'float: left' %>
+		<% else %>
+			<%= link_to "Cancel", root_path, class: 'btn btn-danger', style: 'float: left' %>
+		<% end %>
+		<% if @threads.id %>
+			<%= c.submit "Update", class: 'btn btn-primary', style: 'float: right' %>
+		<% else %>
+			<%= c.submit "Create", class: 'btn btn-success', style: 'float: right' %>
+		<% end %>
+	</div>
+<% end %>
